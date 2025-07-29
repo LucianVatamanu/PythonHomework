@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Math API UI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Math API Web Interface</h1>
+
+    <div class="form-group">
+  <h2>1. Power</h2>
+  <input type="number" id="pow-base" placeholder="Base">
+  <input type="number" id="pow-exp" placeholder="Exponent">
+  <button onclick="calcPow()">Calculate</button>
+  <div class="result-box" id="pow-result">Result will appear here</div>
+</div>
+
+    <div class="form-group">
+  <h2>2. Fibonacci</h2>
+  <input type="number" id="fib-n" placeholder="n">
+  <button onclick="calcFib()">Calculate</button>
+  <div class="result-box" id="fib-result">Result will appear here</div>
+</div>
+
+    <div class="form-group">
+  <h2>3. Factorial</h2>
+  <input type="number" id="fact-n" placeholder="n">
+  <button onclick="calcFact()">Calculate</button>
+  <div class="result-box" id="fact-result">Result will appear here</div>
+</div>
+
+  <script>
+    const API = "http://localhost:8000";
+
+    async function calcPow() {
+      const base = parseFloat(document.getElementById("pow-base").value);
+      const exponent = parseFloat(document.getElementById("pow-exp").value);
+      const response = await fetch(`${API}/pow`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base, exponent })
+      });
+      const data = await response.json();
+      document.getElementById("pow-result").innerText =
+        data.result !== undefined ? `Result: ${data.result}` : `Error: ${JSON.stringify(data)}`;
+    }
+
+    async function calcFib() {
+      const n = parseInt(document.getElementById("fib-n").value);
+      const response = await fetch(`${API}/fibonacci`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ n })
+      });
+      const data = await response.json();
+      document.getElementById("fib-result").innerText =
+        data.result !== undefined ? `Result: ${data.result}` : `Error: ${JSON.stringify(data)}`;
+    }
+
+    async function calcFact() {
+      const n = parseInt(document.getElementById("fact-n").value);
+      const response = await fetch(`${API}/factorial`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ n })
+      });
+      const data = await response.json();
+      document.getElementById("fact-result").innerText =
+        data.result !== undefined ? `Result: ${data.result}` : `Error: ${JSON.stringify(data)}`;
+    }
+  </script>
+</body>
+</html>

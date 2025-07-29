@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.models import (
     PowRequest, PowResponse,
     FibonacciRequest, FibonacciResponse,
@@ -19,6 +20,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # în producție poți restricționa ex. ["http://localhost"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # pow
 @app.post("/pow", response_model=PowResponse)
